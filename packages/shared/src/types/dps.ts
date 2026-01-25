@@ -1,4 +1,4 @@
-﻿export interface DiscoveredProjectState {
+export interface DiscoveredProjectState {
   metadata: {
     discoveryDate: string;
     repository: string;

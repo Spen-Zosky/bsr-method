@@ -1,12 +1,13 @@
-﻿import { defineConfig } from 'tsup';
+import { defineConfig } from 'tsup';
 
 export default defineConfig({
   entry: ['src/index.ts', 'src/bin/bsr.ts'],
-  format: ['esm'],
+  format: ['cjs'],
   dts: true,
   splitting: false,
   sourcemap: true,
   clean: true,
   target: 'node18',
   shims: true,
+  outExtension: () => ({ js: '.js' }),
 });

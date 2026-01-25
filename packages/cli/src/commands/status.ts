@@ -1,4 +1,4 @@
-﻿import { Command } from 'commander';
+import { Command } from 'commander';
 import chalk from 'chalk';
 import fs from 'fs-extra';
 import yaml from 'yaml';

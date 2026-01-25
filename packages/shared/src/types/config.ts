@@ -1,4 +1,4 @@
-﻿export type LLMTarget = 'claude' | 'cursor' | 'copilot' | 'vscode' | 'generic';
+export type LLMTarget = 'claude' | 'cursor' | 'copilot' | 'vscode' | 'generic';
 export type ProjectType = 'greenfield' | 'brownfield';
 
 export interface BSRConfig {

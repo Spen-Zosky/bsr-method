@@ -1,4 +1,4 @@
-﻿import { Command } from 'commander';
+import { Command } from 'commander';
 import inquirer from 'inquirer';
 import chalk from 'chalk';
 import ora from 'ora';
