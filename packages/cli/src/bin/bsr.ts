@@ -12,6 +12,8 @@ import { tasksCommand } from '../commands/tasks.js';
 import { discoverCommand } from '../commands/discover.js';
 import { runCommand } from '../commands/run.js';
 import { dashboardCommand } from '../commands/dashboard.js';
+import { exportCommand } from '../commands/export.js';
+import { syncCommand } from '../commands/sync.js';
 
 const VERSION = '0.1.0';
 
@@ -36,20 +38,8 @@ program.addCommand(specCommand);
 program.addCommand(tasksCommand);
 program.addCommand(runCommand);
 program.addCommand(dashboardCommand);
-
-const placeholders = [
-  ['export', 'Export reports (PDF/HTML/MD)'],
-  ['sync', 'Sync with GitHub Issues/Projects'],
-];
-
-for (const [name, desc] of placeholders) {
-  program
-    .command(name)
-    .description(desc + chalk.gray(' [coming soon]'))
-    .action(() => {
-      console.log(chalk.yellow('\nCommand not yet implemented.\n'));
-    });
-}
+program.addCommand(exportCommand);
+program.addCommand(syncCommand);
 
 export function run() {
   program.parse();
