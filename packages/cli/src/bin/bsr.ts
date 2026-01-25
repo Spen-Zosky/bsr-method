@@ -10,6 +10,7 @@ import { planCommand } from '../commands/plan.js';
 import { specCommand } from '../commands/spec.js';
 import { tasksCommand } from '../commands/tasks.js';
 import { discoverCommand } from '../commands/discover.js';
+import { runCommand } from '../commands/run.js';
 
 const VERSION = '0.1.0';
 
@@ -32,9 +33,9 @@ program.addCommand(discoverCommand);
 program.addCommand(planCommand);
 program.addCommand(specCommand);
 program.addCommand(tasksCommand);
+program.addCommand(runCommand);
 
 const placeholders = [
-  ['run', 'Start Ralph loop execution'],
   ['dashboard', 'Open web dashboard'],
   ['export', 'Export reports (PDF/HTML/MD)'],
   ['sync', 'Sync with GitHub Issues/Projects'],
