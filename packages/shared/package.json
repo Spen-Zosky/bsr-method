@@ -1,0 +1,16 @@
+﻿{
+  "name": "@bsr-method/shared",
+  "version": "0.1.0",
+  "description": "Shared types and utilities for BSR Method",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "clean": "rimraf dist"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.0"
+  },
+  "license": "MIT"
+}

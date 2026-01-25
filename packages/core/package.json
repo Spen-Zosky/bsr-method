@@ -1,0 +1,19 @@
+﻿{
+  "name": "@bsr-method/core",
+  "version": "0.1.0",
+  "description": "Core engine for BSR Method",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "clean": "rimraf dist"
+  },
+  "dependencies": {
+    "@bsr-method/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.0"
+  },
+  "license": "MIT"
+}

@@ -1,0 +1,16 @@
+﻿node_modules/
+dist/
+*.tsbuildinfo
+.turbo/
+coverage/
+.env
+.env.local
+*.log
+.DS_Store
+Thumbs.db
+.vscode/
+!.vscode/settings.json
+.idea/
+.bsr/
+progress.txt
+discovery/
