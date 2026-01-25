@@ -6,3 +6,4 @@ export { specCommand } from './spec.js';
 export { tasksCommand } from './tasks.js';
 export { discoverCommand } from './discover.js';
 export { runCommand } from './run.js';
+export { dashboardCommand } from './dashboard.js';

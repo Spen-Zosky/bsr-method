@@ -11,6 +11,7 @@ import { specCommand } from '../commands/spec.js';
 import { tasksCommand } from '../commands/tasks.js';
 import { discoverCommand } from '../commands/discover.js';
 import { runCommand } from '../commands/run.js';
+import { dashboardCommand } from '../commands/dashboard.js';
 
 const VERSION = '0.1.0';
 
@@ -34,9 +35,9 @@ program.addCommand(planCommand);
 program.addCommand(specCommand);
 program.addCommand(tasksCommand);
 program.addCommand(runCommand);
+program.addCommand(dashboardCommand);
 
 const placeholders = [
-  ['dashboard', 'Open web dashboard'],
   ['export', 'Export reports (PDF/HTML/MD)'],
   ['sync', 'Sync with GitHub Issues/Projects'],
 ];
