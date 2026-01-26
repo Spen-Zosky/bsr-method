@@ -7,7 +7,9 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "clean": "rimraf dist"
+    "clean": "rimraf dist",
+    "lint": "echo 'No lint configured'",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@bsr-method/shared": "workspace:*"

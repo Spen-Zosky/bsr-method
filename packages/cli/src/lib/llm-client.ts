@@ -140,7 +140,7 @@ export class LLMClient {
       throw new Error(`Claude API error (${response.status}): ${error}`);
     }
 
-    const data = await response.json();
+    const data = await response.json() as any;
 
     return {
       content: data.content[0]?.text || '',
@@ -197,7 +197,7 @@ export class LLMClient {
       throw new Error(`OpenAI API error (${response.status}): ${error}`);
     }
 
-    const data = await response.json();
+    const data = await response.json() as any;
 
     return {
       content: data.choices[0]?.message?.content || '',

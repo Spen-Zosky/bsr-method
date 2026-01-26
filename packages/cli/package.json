@@ -36,7 +36,9 @@
     "dev": "tsup --watch",
     "test": "vitest run",
     "prepublishOnly": "npm run build",
-    "mcp": "node dist/mcp/server.js"
+    "mcp": "node dist/mcp/server.js",
+    "lint": "echo 'No lint configured'",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "chalk": "^5.3.0",
