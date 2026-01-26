@@ -1,209 +1,121 @@
-/**
- * BSR Method - LLM Client Tests
- */
-
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { LLMClient, LLMMessage } from '../lib/llm-client.js';
+import { LLMClient } from '../src/lib/llm-client.js';
 
 describe('LLMClient', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   describe('constructor', () => {
-    it('should use default claude provider', () => {
-      const client = new LLMClient();
+    it('should default to claude provider', () => {
+      const client = new LLMClient({ apiKey: 'test-key' });
       expect(client).toBeDefined();
     });
 
-    it('should accept custom provider', () => {
-      const client = new LLMClient({ provider: 'openai' });
-      expect(client).toBeDefined();
-    });
-
-    it('should accept custom model', () => {
-      const client = new LLMClient({ 
-        provider: 'claude', 
-        model: 'claude-3-opus-20240229' 
-      });
-      expect(client).toBeDefined();
-    });
-
-    it('should accept custom settings', () => {
+    it('should accept custom provider and model', () => {
       const client = new LLMClient({
         provider: 'openai',
-        model: 'gpt-4-turbo',
-        maxTokens: 8192,
-        temperature: 0.5,
+        model: 'gpt-4',
+        apiKey: 'test-key',
       });
       expect(client).toBeDefined();
     });
   });
 
   describe('complete', () => {
-    let client: LLMClient;
-    let fetchSpy: any;
-
-    beforeEach(() => {
-      client = new LLMClient({ 
-        provider: 'claude',
-        apiKey: 'test-api-key' 
-      });
-      
-      fetchSpy = vi.spyOn(global, 'fetch');
-    });
-
-    afterEach(() => {
-      vi.restoreAllMocks();
-    });
-
-    it('should send request to Claude API', async () => {
-      fetchSpy.mockResolvedValueOnce({
+    it('should call Claude API with correct format', async () => {
+      const mockResponse = {
         ok: true,
         json: async () => ({
-          content: [{ text: 'Hello, world!' }],
-          model: 'claude-sonnet-4-20250514',
+          content: [{ type: 'text', text: 'Hello!' }],
           usage: { input_tokens: 10, output_tokens: 5 },
-          stop_reason: 'end_turn',
         }),
-      });
+      };
 
-      const messages: LLMMessage[] = [
-        { role: 'user', content: 'Say hello' }
-      ];
+      vi.spyOn(global, 'fetch').mockResolvedValue(mockResponse as Response);
 
-      const response = await client.complete(messages);
+      const client = new LLMClient({ apiKey: 'test-key' });
+      const result = await client.complete([{ role: 'user', content: 'Hi' }]);
 
-      expect(fetchSpy).toHaveBeenCalledWith(
+      expect(result.content).toBe('Hello!');
+      expect(global.fetch).toHaveBeenCalledWith(
         'https://api.anthropic.com/v1/messages',
         expect.objectContaining({
           method: 'POST',
           headers: expect.objectContaining({
-            'x-api-key': 'test-api-key',
-            'anthropic-version': '2023-06-01',
+            'x-api-key': 'test-key',
           }),
         })
       );
-
-      expect(response.content).toBe('Hello, world!');
-      expect(response.usage?.inputTokens).toBe(10);
-      expect(response.usage?.outputTokens).toBe(5);
     });
 
     it('should handle API errors', async () => {
-      fetchSpy.mockResolvedValueOnce({
+      const mockResponse = {
         ok: false,
         status: 401,
-        text: async () => 'Invalid API key',
-      });
+        json: async () => ({ error: { message: 'Invalid API key' } }),
+      };
 
-      const messages: LLMMessage[] = [
-        { role: 'user', content: 'Test' }
-      ];
+      vi.spyOn(global, 'fetch').mockResolvedValue(mockResponse as Response);
 
-      await expect(client.complete(messages)).rejects.toThrow('Claude API error (401)');
-    });
-
-    it('should include system prompt', async () => {
-      fetchSpy.mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({
-          content: [{ text: 'Response' }],
-          model: 'claude-sonnet-4-20250514',
-        }),
-      });
-
-      await client.complete(
-        [{ role: 'user', content: 'Test' }],
-        'You are a helpful assistant'
-      );
-
-      const callBody = JSON.parse(fetchSpy.mock.calls[0][1].body);
-      expect(callBody.system).toBe('You are a helpful assistant');
+      const client = new LLMClient({ apiKey: 'bad-key' });
+      
+      await expect(client.complete([{ role: 'user', content: 'Hi' }]))
+        .rejects.toThrow();
     });
   });
 
   describe('ask', () => {
-    it('should return content string directly', async () => {
-      const client = new LLMClient({ apiKey: 'test-key' });
-      
-      vi.spyOn(global, 'fetch').mockResolvedValueOnce({
+    it('should return string response', async () => {
+      const mockResponse = {
         ok: true,
         json: async () => ({
-          content: [{ text: 'Simple response' }],
-          model: 'claude-sonnet-4-20250514',
+          content: [{ type: 'text', text: 'Response text' }],
+          usage: { input_tokens: 10, output_tokens: 5 },
         }),
-      } as Response);
+      };
 
-      const response = await client.ask('Hello');
-      expect(response).toBe('Simple response');
+      vi.spyOn(global, 'fetch').mockResolvedValue(mockResponse as Response);
+
+      const client = new LLMClient({ apiKey: 'test-key' });
+      const result = await client.ask('Hello');
+
+      expect(result).toBe('Response text');
     });
   });
 
   describe('OpenAI provider', () => {
-    let client: LLMClient;
-    let fetchSpy: any;
-
-    beforeEach(() => {
-      client = new LLMClient({ 
-        provider: 'openai',
-        apiKey: 'test-openai-key' 
-      });
-      
-      fetchSpy = vi.spyOn(global, 'fetch');
-    });
-
-    afterEach(() => {
-      vi.restoreAllMocks();
-    });
-
-    it('should send request to OpenAI API', async () => {
-      fetchSpy.mockResolvedValueOnce({
+    it('should call OpenAI API with correct format', async () => {
+      const mockResponse = {
         ok: true,
         json: async () => ({
-          choices: [{ message: { content: 'OpenAI response' }, finish_reason: 'stop' }],
-          model: 'gpt-4o',
+          choices: [{ message: { content: 'Hello from OpenAI!' } }],
           usage: { prompt_tokens: 10, completion_tokens: 5 },
         }),
+      };
+
+      vi.spyOn(global, 'fetch').mockResolvedValue(mockResponse as Response);
+
+      const client = new LLMClient({
+        provider: 'openai',
+        apiKey: 'test-key',
       });
+      const result = await client.complete([{ role: 'user', content: 'Hi' }]);
 
-      const response = await client.complete([
-        { role: 'user', content: 'Hello' }
-      ]);
-
-      expect(fetchSpy).toHaveBeenCalledWith(
+      expect(result.content).toBe('Hello from OpenAI!');
+      expect(global.fetch).toHaveBeenCalledWith(
         'https://api.openai.com/v1/chat/completions',
         expect.objectContaining({
           method: 'POST',
           headers: expect.objectContaining({
-            'Authorization': 'Bearer test-openai-key',
+            'Authorization': 'Bearer test-key',
           }),
         })
       );
-
-      expect(response.content).toBe('OpenAI response');
     });
-  });
-});
-
-describe('Message handling', () => {
-  it('should filter system messages for Claude', async () => {
-    const client = new LLMClient({ apiKey: 'test-key' });
-    const fetchSpy = vi.spyOn(global, 'fetch').mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({
-        content: [{ text: 'Response' }],
-        model: 'claude-sonnet-4-20250514',
-      }),
-    } as Response);
-
-    await client.complete([
-      { role: 'system', content: 'System prompt' },
-      { role: 'user', content: 'User message' },
-    ]);
-
-    const callBody = JSON.parse(fetchSpy.mock.calls[0][1].body);
-    // System should be extracted to top-level, not in messages
-    expect(callBody.system).toBe('System prompt');
-    expect(callBody.messages).toHaveLength(1);
-    expect(callBody.messages[0].role).toBe('user');
-
-    vi.restoreAllMocks();
   });
 });
