@@ -1,36 +1,61 @@
 {
   "name": "bsr-method",
   "version": "0.1.0",
-  "description": "BSR Method CLI - AI-driven development framework",
+  "description": "BSR Method CLI - AI-driven development framework integrating BMAD, SpecKit, and Ralph",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
     "bsr": "dist/bin/bsr.js",
-    "bsr-method": "dist/bin/bsr.js"
+    "bsr-method": "dist/bin/bsr.js",
+    "bsr-mcp": "dist/mcp/server.js"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "cli",
+    "ai",
+    "development",
+    "bmad",
+    "speckit",
+    "ralph",
+    "planning",
+    "specifications",
+    "tasks"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Spen-Zosky/bsr-method.git"
+  },
+  "homepage": "https://github.com/Spen-Zosky/bsr-method#readme",
+  "bugs": {
+    "url": "https://github.com/Spen-Zosky/bsr-method/issues"
+  },
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
     "test": "vitest run",
-    "lint": "eslint src/",
-    "typecheck": "tsc --noEmit",
-    "clean": "rimraf dist"
+    "prepublishOnly": "npm run build",
+    "mcp": "node dist/mcp/server.js"
   },
   "dependencies": {
-    "@bsr-method/core": "workspace:*",
-    "@bsr-method/shared": "workspace:*",
     "chalk": "^5.3.0",
     "commander": "^12.0.0",
     "fs-extra": "^11.2.0",
     "inquirer": "^9.2.0",
     "ora": "^8.0.0",
-    "yaml": "^2.3.0"
+    "yaml": "^2.3.0",
+    "@modelcontextprotocol/sdk": "^1.0.0"
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.0",
     "@types/inquirer": "^9.0.0",
-    "tsup": "^8.0.0"
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^1.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   },
   "author": "Enzo Spenuso <spen.zosky@gmail.com>",
   "license": "MIT"

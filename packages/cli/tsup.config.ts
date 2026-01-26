@@ -1,7 +1,11 @@
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
-  entry: ['src/index.ts', 'src/bin/bsr.ts'],
+  entry: [
+    'src/index.ts',
+    'src/bin/bsr.ts',
+    'src/mcp/server.ts',
+  ],
   format: ['cjs'],
   dts: true,
   splitting: false,
