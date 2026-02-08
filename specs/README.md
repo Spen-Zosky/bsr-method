@@ -1,52 +1,61 @@
 # BSR Method - Specifications
 
-> AI-driven development framework integrating BMAD, SpecKit, and Ralph
+> End-to-end AI-driven development framework: BMAD (planning) + SpecKit (specs) + Ralph (execution)
 
 ## Structure
 
 ```
 specs/
-├── CONSTITUTION.md      # Project principles
+├── CONSTITUTION.md      # Project principles and technical standards
 ├── README.md            # This file
-├── features/            # Feature specs
-│   └── cli-with-11-commands-covering-the-full-development-lifecycle.md
-│   └── bmad-planning-phase-idea-prd-architecture.md
-│   └── speckit-specification-phase-constitution-feature-specs-api-specs.md
-│   └── ralph-execution-loop-llm-powered-task-implementation.md
-│   └── brownfield-discovery-analyze-existing-codebases.md
-│   └── task-breakdown-with-dependencies-and-priority.md
-│   └── web-dashboard-for-task-visualization.md
-│   └── mcp-server-for-claude-desktop-integration.md
-│   └── multi-llm-support-claude-openai.md
+├── features/            # Feature specifications (per-feature)
+│   ├── cli-with-11-commands-covering-the-full-development-lifecycle.md
+│   ├── bmad-planning-phase-idea-prd-architecture.md
+│   ├── speckit-specification-phase-constitution-feature-specs-api-specs.md
+│   ├── ralph-execution-loop-llm-powered-task-implementation.md
+│   ├── brownfield-discovery-analyze-existing-codebases.md
+│   ├── task-breakdown-with-dependencies-and-priority.md
+│   ├── web-dashboard-for-task-visualization.md
+│   ├── mcp-server-for-claude-desktop-integration.md
+│   ├── multi-llm-support-claude-openai.md
 │   └── export-to-markdown-html-pdf.md
 ├── api/
-│   └── endpoints.md    # API specs
+│   └── endpoints.md     # Dashboard REST API & WebSocket specification
 ├── data/
-│   └── models.md       # Data models
+│   └── models.md        # TypeScript interfaces and data formats
 └── ui/
-    └── components.md   # UI specs
+    └── components.md    # Dashboard UI specification
 ```
+
+## Key Documents
+
+| Document | Description |
+|----------|-------------|
+| [CONSTITUTION.md](CONSTITUTION.md) | Core principles: pipeline-first, adapter extensibility, LLM-agnostic, offline-capable |
+| [api/endpoints.md](api/endpoints.md) | Dashboard REST API (tasks CRUD, project info, logs) + WebSocket protocol |
+| [data/models.md](data/models.md) | BSRConfig, Task, BMADProject, ValidationResult, and all TypeScript interfaces |
+| [ui/components.md](ui/components.md) | Dashboard kanban board, task cards, real-time updates |
 
 ## Features
 
 | Feature | Spec | Status |
 |---------|------|--------|
-| CLI with 11 commands covering the full development lifecycle | [cli-with-11-commands-covering-the-full-development-lifecycle.md](features/cli-with-11-commands-covering-the-full-development-lifecycle.md) | Draft |
-| BMAD planning phase: idea -> PRD -> architecture | [bmad-planning-phase-idea-prd-architecture.md](features/bmad-planning-phase-idea-prd-architecture.md) | Draft |
-| SpecKit specification phase: constitution, feature specs, API specs | [speckit-specification-phase-constitution-feature-specs-api-specs.md](features/speckit-specification-phase-constitution-feature-specs-api-specs.md) | Draft |
-| Ralph execution loop: LLM-powered task implementation | [ralph-execution-loop-llm-powered-task-implementation.md](features/ralph-execution-loop-llm-powered-task-implementation.md) | Draft |
-| Brownfield discovery: analyze existing codebases | [brownfield-discovery-analyze-existing-codebases.md](features/brownfield-discovery-analyze-existing-codebases.md) | Draft |
-| Task breakdown with dependencies and priority | [task-breakdown-with-dependencies-and-priority.md](features/task-breakdown-with-dependencies-and-priority.md) | Draft |
-| Web dashboard for task visualization | [web-dashboard-for-task-visualization.md](features/web-dashboard-for-task-visualization.md) | Draft |
-| MCP server for Claude Desktop integration | [mcp-server-for-claude-desktop-integration.md](features/mcp-server-for-claude-desktop-integration.md) | Draft |
-| Multi-LLM support (Claude, OpenAI) | [multi-llm-support-claude-openai.md](features/multi-llm-support-claude-openai.md) | Draft |
-| Export to markdown, HTML, PDF | [export-to-markdown-html-pdf.md](features/export-to-markdown-html-pdf.md) | Draft |
+| CLI (11 commands) | [cli-with-11-commands](features/cli-with-11-commands-covering-the-full-development-lifecycle.md) | Implemented |
+| BMAD Planning Phase | [bmad-planning-phase](features/bmad-planning-phase-idea-prd-architecture.md) | Implemented |
+| SpecKit Specification Phase | [speckit-specification-phase](features/speckit-specification-phase-constitution-feature-specs-api-specs.md) | Implemented |
+| Ralph Execution Loop | [ralph-execution-loop](features/ralph-execution-loop-llm-powered-task-implementation.md) | Implemented |
+| Brownfield Discovery | [brownfield-discovery](features/brownfield-discovery-analyze-existing-codebases.md) | Implemented |
+| Task Breakdown | [task-breakdown](features/task-breakdown-with-dependencies-and-priority.md) | Implemented |
+| Web Dashboard | [web-dashboard](features/web-dashboard-for-task-visualization.md) | Implemented |
+| MCP Server | [mcp-server](features/mcp-server-for-claude-desktop-integration.md) | Implemented (basic) |
+| Multi-LLM Support | [multi-llm](features/multi-llm-support-claude-openai.md) | Partial |
+| Export (MD/HTML/JSON) | [export](features/export-to-markdown-html-pdf.md) | Implemented |
 
-## Next Steps
+## Related Documents
 
-1. Review each specification
-2. Run `bsr tasks` to generate task breakdown
-3. Run `bsr run` to start implementation
+- [docs/prd.md](../docs/prd.md) - Product Requirements Document
+- [docs/architecture.md](../docs/architecture.md) - Technical Architecture
+- [tasks/breakdown.md](../tasks/breakdown.md) - Task Breakdown
 
 ---
-*Generated by BSR Method - SpecKit*
+*BSR Method - Specifications*
