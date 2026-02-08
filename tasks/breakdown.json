@@ -1,0 +1,105 @@
+{
+  "version": "0.2.0",
+  "created": "2026-01-27",
+  "tasks": [
+    {
+      "id": "T1",
+      "title": "Setup packages/adapters structure",
+      "description": "Create adapter package directories and base configuration",
+      "priority": "P0",
+      "effort": "2h",
+      "status": "pending",
+      "dependencies": []
+    },
+    {
+      "id": "T2",
+      "title": "BMAD adapter - parser",
+      "description": "Parse BMAD output files and extract structured data",
+      "priority": "P0",
+      "effort": "4h",
+      "status": "pending",
+      "dependencies": ["T1"]
+    },
+    {
+      "id": "T3",
+      "title": "BMAD adapter - transformer",
+      "description": "Transform parsed BMAD data to BSR idea.yaml format",
+      "priority": "P0",
+      "effort": "4h",
+      "status": "pending",
+      "dependencies": ["T2"]
+    },
+    {
+      "id": "T4",
+      "title": "SpecKit adapter - generator",
+      "description": "Generate spec.md from idea.yaml using SpecKit",
+      "priority": "P1",
+      "effort": "4h",
+      "status": "pending",
+      "dependencies": ["T1"]
+    },
+    {
+      "id": "T5",
+      "title": "SpecKit adapter - validator",
+      "description": "Validate generated specs against schema",
+      "priority": "P1",
+      "effort": "3h",
+      "status": "pending",
+      "dependencies": ["T4"]
+    },
+    {
+      "id": "T6",
+      "title": "Dashboard - server setup",
+      "description": "Setup Express/Fastify server for dashboard",
+      "priority": "P1",
+      "effort": "3h",
+      "status": "pending",
+      "dependencies": []
+    },
+    {
+      "id": "T7",
+      "title": "Dashboard - REST API",
+      "description": "Implement REST API for task CRUD operations",
+      "priority": "P1",
+      "effort": "4h",
+      "status": "pending",
+      "dependencies": ["T6"]
+    },
+    {
+      "id": "T8",
+      "title": "Dashboard - WebSocket",
+      "description": "Add WebSocket support for real-time updates",
+      "priority": "P2",
+      "effort": "3h",
+      "status": "pending",
+      "dependencies": ["T7"]
+    },
+    {
+      "id": "T9",
+      "title": "Dashboard - UI",
+      "description": "Build React/Svelte UI for task management",
+      "priority": "P2",
+      "effort": "6h",
+      "status": "pending",
+      "dependencies": ["T7"]
+    },
+    {
+      "id": "T10",
+      "title": "npm 2FA + publish",
+      "description": "Setup npm 2FA and publish v0.1.0",
+      "priority": "P0",
+      "effort": "1h",
+      "status": "pending",
+      "dependencies": []
+    },
+    {
+      "id": "T11",
+      "title": "Documentation site",
+      "description": "Create documentation with GitHub Pages",
+      "priority": "P2",
+      "effort": "4h",
+      "status": "pending",
+      "dependencies": ["T10"]
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "name": "@bsr-method/bmad-adapter",
+  "version": "0.1.0",
+  "description": "BMAD adapter for BSR Method",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "npx tsup",
+    "dev": "npx tsup --watch",
+    "test": "vitest run",
+    "lint": "echo 'No lint configured'",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "yaml": "^2.3.0"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.0",
+    "typescript": "^5.3.0",
+    "vitest": "^1.2.0"
+  }
+}

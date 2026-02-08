@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BSR Dashboard</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      min-height: 100vh;
+    }
+    header {
+      background: #1e293b;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #334155;
+    }
+    header h1 { font-size: 1.5rem; color: #38bdf8; }
+    .stats {
+      display: flex;
+      gap: 1.5rem;
+    }
+    .stat {
+      text-align: center;
+    }
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+    .stat-label {
+      font-size: 0.75rem;
+      color: #94a3b8;
+      text-transform: uppercase;
+    }
+    .stat.pending .stat-value { color: #fbbf24; }
+    .stat.in-progress .stat-value { color: #38bdf8; }
+    .stat.completed .stat-value { color: #22c55e; }
+    .stat.blocked .stat-value { color: #ef4444; }
+    main {
+      padding: 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .board {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+    }
+    .column {
+      background: #1e293b;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      min-height: 500px;
+    }
+    .column-header {
+      font-weight: 600;
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+      border-radius: 0.25rem;
+      text-align: center;
+    }
+    .column.pending .column-header { background: #854d0e; color: #fef3c7; }
+    .column.in-progress .column-header { background: #0369a1; color: #e0f2fe; }
+    .column.completed .column-header { background: #166534; color: #dcfce7; }
+    .column.blocked .column-header { background: #991b1b; color: #fee2e2; }
+    .task-card {
+      background: #334155;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      margin-bottom: 0.75rem;
+      cursor: grab;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .task-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .task-card.dragging {
+      opacity: 0.5;
+    }
+    .task-id {
+      font-size: 0.7rem;
+      color: #64748b;
+      margin-bottom: 0.25rem;
+    }
+    .task-title {
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+    .task-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+    }
+    .priority {
+      padding: 0.125rem 0.5rem;
+      border-radius: 0.25rem;
+      font-weight: 600;
+    }
+    .priority.P0 { background: #ef4444; color: white; }
+    .priority.P1 { background: #f97316; color: white; }
+    .priority.P2 { background: #eab308; color: black; }
+    .priority.P3 { background: #6b7280; color: white; }
+    .effort { color: #94a3b8; }
+    .drop-zone {
+      border: 2px dashed transparent;
+      border-radius: 0.5rem;
+      min-height: 100px;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .drop-zone.drag-over {
+      border-color: #38bdf8;
+      background: rgba(56, 189, 248, 0.1);
+    }
+    .connection-status {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ef4444;
+    }
+    .status-dot.connected { background: #22c55e; }
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: #334155;
+      padding: 1rem 1.5rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s;
+    }
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    .toast.success { border-left: 4px solid #22c55e; }
+    .toast.error { border-left: 4px solid #ef4444; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>📋 BSR Dashboard</h1>
+    <div class="stats" id="stats">
+      <div class="stat pending">
+        <div class="stat-value" id="stat-pending">0</div>
+        <div class="stat-label">Pending</div>
+      </div>
+      <div class="stat in-progress">
+        <div class="stat-value" id="stat-progress">0</div>
+        <div class="stat-label">In Progress</div>
+      </div>
+      <div class="stat completed">
+        <div class="stat-value" id="stat-completed">0</div>
+        <div class="stat-label">Completed</div>
+      </div>
+      <div class="stat blocked">
+        <div class="stat-value" id="stat-blocked">0</div>
+        <div class="stat-label">Blocked</div>
+      </div>
+    </div>
+    <div class="connection-status">
+      <div class="status-dot" id="ws-status"></div>
+      <span id="ws-text">Disconnected</span>
+    </div>
+  </header>
+
+  <main>
+    <div class="board">
+      <div class="column pending">
+        <div class="column-header">📝 Pending</div>
+        <div class="drop-zone" data-status="pending" id="col-pending"></div>
+      </div>
+      <div class="column in-progress">
+        <div class="column-header">🔄 In Progress</div>
+        <div class="drop-zone" data-status="in-progress" id="col-progress"></div>
+      </div>
+      <div class="column completed">
+        <div class="column-header">✅ Completed</div>
+        <div class="drop-zone" data-status="completed" id="col-completed"></div>
+      </div>
+      <div class="column blocked">
+        <div class="column-header">🚫 Blocked</div>
+        <div class="drop-zone" data-status="blocked" id="col-blocked"></div>
+      </div>
+    </div>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    let ws = null;
+    let tasks = [];
+    let draggedTask = null;
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      connectWebSocket();
+      setupDragAndDrop();
+    });
+
+    // WebSocket connection
+    function connectWebSocket() {
+      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+      ws = new WebSocket(`${protocol}//${window.location.host}/ws`);
+
+      ws.onopen = () => {
+        document.getElementById('ws-status').classList.add('connected');
+        document.getElementById('ws-text').textContent = 'Connected';
+      };
+
+      ws.onclose = () => {
+        document.getElementById('ws-status').classList.remove('connected');
+        document.getElementById('ws-text').textContent = 'Disconnected';
+        // Reconnect after 3 seconds
+        setTimeout(connectWebSocket, 3000);
+      };
+
+      ws.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        handleMessage(data);
+      };
+    }
+
+    // Handle WebSocket messages
+    function handleMessage(data) {
+      switch (data.type) {
+        case 'init':
+          tasks = data.tasks || [];
+          renderBoard();
+          break;
+        case 'task-updated':
+          const idx = tasks.findIndex(t => t.id === data.task.id);
+          if (idx !== -1) tasks[idx] = data.task;
+          renderBoard();
+          showToast('Task updated', 'success');
+          break;
+        case 'task-created':
+          tasks.push(data.task);
+          renderBoard();
+          showToast('Task created', 'success');
+          break;
+        case 'task-deleted':
+          tasks = tasks.filter(t => t.id !== data.taskId);
+          renderBoard();
+          showToast('Task deleted', 'success');
+          break;
+        case 'error':
+          showToast(data.error, 'error');
+          break;
+      }
+    }
+
+    // Render board
+    function renderBoard() {
+      const columns = {
+        'pending': document.getElementById('col-pending'),
+        'in-progress': document.getElementById('col-progress'),
+        'completed': document.getElementById('col-completed'),
+        'blocked': document.getElementById('col-blocked'),
+      };
+
+      // Clear columns
+      Object.values(columns).forEach(col => col.innerHTML = '');
+
+      // Group tasks by status
+      const grouped = { pending: [], 'in-progress': [], completed: [], blocked: [] };
+      tasks.forEach(task => {
+        const status = task.status || 'pending';
+        if (grouped[status]) grouped[status].push(task);
+      });
+
+      // Render tasks
+      Object.entries(grouped).forEach(([status, statusTasks]) => {
+        statusTasks.forEach(task => {
+          columns[status].appendChild(createTaskCard(task));
+        });
+      });
+
+      // Update stats
+      document.getElementById('stat-pending').textContent = grouped.pending.length;
+      document.getElementById('stat-progress').textContent = grouped['in-progress'].length;
+      document.getElementById('stat-completed').textContent = grouped.completed.length;
+      document.getElementById('stat-blocked').textContent = grouped.blocked.length;
+    }
+
+    // Create task card
+    function createTaskCard(task) {
+      const card = document.createElement('div');
+      card.className = 'task-card';
+      card.draggable = true;
+      card.dataset.taskId = task.id;
+      
+      card.innerHTML = `
+        <div class="task-id">${task.id}</div>
+        <div class="task-title">${task.title}</div>
+        <div class="task-meta">
+          <span class="priority ${task.priority}">${task.priority}</span>
+          <span class="effort">${task.effort || ''}</span>
+        </div>
+      `;
+
+      // Drag events
+      card.addEventListener('dragstart', (e) => {
+        draggedTask = task;
+        card.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+      });
+
+      card.addEventListener('dragend', () => {
+        card.classList.remove('dragging');
+        draggedTask = null;
+      });
+
+      return card;
+    }
+
+    // Setup drag and drop
+    function setupDragAndDrop() {
+      document.querySelectorAll('.drop-zone').forEach(zone => {
+        zone.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          zone.classList.add('drag-over');
+        });
+
+        zone.addEventListener('dragleave', () => {
+          zone.classList.remove('drag-over');
+        });
+
+        zone.addEventListener('drop', (e) => {
+          e.preventDefault();
+          zone.classList.remove('drag-over');
+          
+          if (draggedTask) {
+            const newStatus = zone.dataset.status;
+            updateTaskStatus(draggedTask.id, newStatus);
+          }
+        });
+      });
+    }
+
+    // Update task status
+    function updateTaskStatus(taskId, newStatus) {
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({
+          type: 'update-task',
+          taskId,
+          updates: { status: newStatus }
+        }));
+      }
+    }
+
+    // Show toast notification
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = `toast ${type} show`;
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+  </script>
+</body>
+</html>

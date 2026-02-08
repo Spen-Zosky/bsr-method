@@ -32,8 +32,8 @@
     "url": "https://github.com/Spen-Zosky/bsr-method/issues"
   },
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
+    "build": "npx tsup",
+    "dev": "npx tsup --watch",
     "test": "vitest run",
     "prepublishOnly": "npm run build",
     "mcp": "node dist/mcp/server.js",
