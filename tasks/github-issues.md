@@ -1,822 +1,286 @@
 # GitHub Issues for BSR Method
 
-Copy each section below to create issues in GitHub.
-
-## TASK-001: Project Setup
-
-**Labels**: type:setup, priority:high
-
-### Description
-Initialize project structure, install dependencies, configure TypeScript
-
-### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
-
-
+Only remaining (todo) tasks are listed. Done tasks have been omitted.
 
 ---
 
-## TASK-002: Configure ESLint and Prettier
+## TASK-004: Configure CI/CD (GitHub Actions)
 
-**Labels**: type:setup, priority:medium
-
-### Description
-Set up linting and formatting rules
-
-### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
-
-### Dependencies
-Blocked by: TASK-001
-
----
-
-## TASK-003: Set up testing framework
-
-**Labels**: type:setup, priority:high
+**Labels**: type:infra, priority:medium
 
 ### Description
-Configure Vitest, set up test utilities
+Set up GitHub Actions for build, test, lint, typecheck on push/PR
 
 ### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
-
-### Dependencies
-Blocked by: TASK-001
-
----
-
-## TASK-004: Configure CI/CD
-
-**Labels**: type:setup, priority:medium
-
-### Description
-Set up GitHub Actions for build, test, lint
-
-### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
+- [ ] Workflow runs on push to main and PR
+- [ ] Build, test, lint, typecheck all pass
+- [ ] Turborepo caching configured
 
 ### Dependencies
 Blocked by: TASK-003
 
 ---
 
-## TASK-005: [CLI with 11 commands covering the full development lifecycle] Create types and interfaces
+## TASK-025: Improve SpecKit output quality
 
-**Labels**: type:feature, priority:high, feature:cli-with-11-commands-covering-the-full-development-lifecycle
-
-### Description
-Define TypeScript types for CLI with 11 commands covering the full development lifecycle
-
-### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
-
-
-
----
-
-## TASK-006: [CLI with 11 commands covering the full development lifecycle] Implement core logic
-
-**Labels**: type:feature, priority:high, feature:cli-with-11-commands-covering-the-full-development-lifecycle
+**Labels**: type:improvement, priority:high
 
 ### Description
-Implement main functionality for CLI with 11 commands covering the full development lifecycle
+SpecKit generates overly generic specs (TBD inputs, meaningless interfaces like `CliWith11CommandsCoveringTheFullDevelopmentLifecycleInput`). Improve templates to produce project-specific content with real inputs/outputs, meaningful interfaces, and accurate technical design.
 
 ### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
-
-### Dependencies
-Blocked by: TASK-005
-
----
-
-## TASK-007: [CLI with 11 commands covering the full development lifecycle] Add validation
-
-**Labels**: type:feature, priority:medium, feature:cli-with-11-commands-covering-the-full-development-lifecycle
-
-### Description
-Input validation and error handling for CLI with 11 commands covering the full development lifecycle
-
-### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
-
-### Dependencies
-Blocked by: TASK-006
-
----
-
-## TASK-008: [CLI with 11 commands covering the full development lifecycle] Write unit tests
-
-**Labels**: type:test, priority:high, feature:cli-with-11-commands-covering-the-full-development-lifecycle
-
-### Description
-Unit tests for CLI with 11 commands covering the full development lifecycle
-
-### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
-
-### Dependencies
-Blocked by: TASK-006
-
----
-
-## TASK-009: [BMAD planning phase: idea -> PRD -> architecture] Create types and interfaces
-
-**Labels**: type:feature, priority:high, feature:bmad-planning-phase-idea-prd-architecture
-
-### Description
-Define TypeScript types for BMAD planning phase: idea -> PRD -> architecture
-
-### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
-
-
-
----
-
-## TASK-010: [BMAD planning phase: idea -> PRD -> architecture] Implement core logic
-
-**Labels**: type:feature, priority:high, feature:bmad-planning-phase-idea-prd-architecture
-
-### Description
-Implement main functionality for BMAD planning phase: idea -> PRD -> architecture
-
-### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
-
-### Dependencies
-Blocked by: TASK-009
-
----
-
-## TASK-011: [BMAD planning phase: idea -> PRD -> architecture] Add validation
-
-**Labels**: type:feature, priority:medium, feature:bmad-planning-phase-idea-prd-architecture
-
-### Description
-Input validation and error handling for BMAD planning phase: idea -> PRD -> architecture
-
-### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
-
-### Dependencies
-Blocked by: TASK-010
-
----
-
-## TASK-012: [BMAD planning phase: idea -> PRD -> architecture] Write unit tests
-
-**Labels**: type:test, priority:high, feature:bmad-planning-phase-idea-prd-architecture
-
-### Description
-Unit tests for BMAD planning phase: idea -> PRD -> architecture
-
-### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
-
-### Dependencies
-Blocked by: TASK-010
-
----
-
-## TASK-013: [SpecKit specification phase: constitution, feature specs, API specs] Create types and interfaces
-
-**Labels**: type:feature, priority:high, feature:speckit-specification-phase-constitution-feature-specs-api-specs
-
-### Description
-Define TypeScript types for SpecKit specification phase: constitution, feature specs, API specs
-
-### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
-
-
-
----
-
-## TASK-014: [SpecKit specification phase: constitution, feature specs, API specs] Implement core logic
-
-**Labels**: type:feature, priority:high, feature:speckit-specification-phase-constitution-feature-specs-api-specs
-
-### Description
-Implement main functionality for SpecKit specification phase: constitution, feature specs, API specs
-
-### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
+- [ ] Generated specs have real inputs/outputs (not TBD)
+- [ ] Interfaces use meaningful names based on actual project types
+- [ ] User stories are specific, not "I want to [feature name]"
+- [ ] Test cases are specific to the feature
 
 ### Dependencies
 Blocked by: TASK-013
 
 ---
 
-## TASK-015: [SpecKit specification phase: constitution, feature specs, API specs] Add validation
+## TASK-026: Improve BMAD plan output quality
 
-**Labels**: type:feature, priority:medium, feature:speckit-specification-phase-constitution-feature-specs-api-specs
+**Labels**: type:improvement, priority:high
 
 ### Description
-Input validation and error handling for SpecKit specification phase: constitution, feature specs, API specs
+`bsr plan` generates generic PRD/architecture with placeholders (`[object Object]` in tech stack, "Feature works as expected" for all acceptance criteria, wrong directory structure). Fix templates to produce accurate documents.
 
 ### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
+- [ ] Tech stack renders as table, not [object Object]
+- [ ] Acceptance criteria are feature-specific
+- [ ] Architecture reflects actual monorepo structure
+- [ ] Directory tree matches real project layout
 
 ### Dependencies
-Blocked by: TASK-014
+Blocked by: TASK-010
 
 ---
 
-## TASK-016: [SpecKit specification phase: constitution, feature specs, API specs] Write unit tests
+## TASK-027: Improve task breakdown output quality
 
-**Labels**: type:test, priority:high, feature:speckit-specification-phase-constitution-feature-specs-api-specs
+**Labels**: type:improvement, priority:high
 
 ### Description
-Unit tests for SpecKit specification phase: constitution, feature specs, API specs
+`bsr tasks` generates repetitive template tasks (types -> core -> validation -> tests for every feature). Make smarter task generation that considers what's already implemented and generates meaningful, non-repetitive tasks.
 
 ### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
+- [ ] Tasks are specific, not "Implement main functionality for [feature name]"
+- [ ] Already-implemented features are marked as done
+- [ ] Task count is reasonable (not 49 for a project with 10 features)
 
 ### Dependencies
-Blocked by: TASK-014
+Blocked by: TASK-015
 
 ---
 
-## TASK-017: [Ralph execution loop: LLM-powered task implementation] Create types and interfaces
+## TASK-028: Complete Multi-LLM adapters
 
-**Labels**: type:feature, priority:high, feature:ralph-execution-loop-llm-powered-task-implementation
-
-### Description
-Define TypeScript types for Ralph execution loop: LLM-powered task implementation
-
-### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
-
-
-
----
-
-## TASK-018: [Ralph execution loop: LLM-powered task implementation] Implement core logic
-
-**Labels**: type:feature, priority:high, feature:ralph-execution-loop-llm-powered-task-implementation
+**Labels**: type:feature, priority:medium
 
 ### Description
-Implement main functionality for Ralph execution loop: LLM-powered task implementation
+Finish Claude and OpenAI adapters with streaming support, prompt templates per target, API key validation. Currently only the `LLMTarget` type is defined.
 
 ### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
+- [ ] Claude adapter with streaming API calls
+- [ ] OpenAI adapter with streaming API calls
+- [ ] Prompt templates per LLM target
+- [ ] Clear error message when API key is missing
+- [ ] Generic target produces copy-paste prompts
 
 ### Dependencies
-Blocked by: TASK-017
+Blocked by: TASK-005
 
 ---
 
-## TASK-019: [Ralph execution loop: LLM-powered task implementation] Add validation
+## TASK-029: Dashboard frontend UI
 
-**Labels**: type:feature, priority:medium, feature:ralph-execution-loop-llm-powered-task-implementation
+**Labels**: type:feature, priority:medium
 
 ### Description
-Input validation and error handling for Ralph execution loop: LLM-powered task implementation
+Build kanban board UI for the dashboard. Backend REST API and WebSocket are already implemented. Needs frontend with task cards, priority badges, drag-and-drop status changes, and real-time WebSocket updates.
 
 ### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
+- [ ] Kanban board with 4 columns (todo, in-progress, blocked, done)
+- [ ] Task cards show title, priority badge, effort, dependencies
+- [ ] Status changes via drag or dropdown
+- [ ] Real-time updates via WebSocket
+- [ ] Responsive layout
 
 ### Dependencies
 Blocked by: TASK-018
 
 ---
 
-## TASK-020: [Ralph execution loop: LLM-powered task implementation] Write unit tests
+## TASK-030: Core package implementation
 
-**Labels**: type:test, priority:high, feature:ralph-execution-loop-llm-powered-task-implementation
+**Labels**: type:refactor, priority:medium
 
 ### Description
-Unit tests for Ralph execution loop: LLM-powered task implementation
+Move shared business logic from CLI commands into `packages/core` (currently a placeholder package). This includes config loading, task processing, file operations that are duplicated across commands.
 
 ### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
+- [ ] Common logic extracted from CLI commands
+- [ ] CLI commands import from core instead of duplicating
+- [ ] All tests still pass after refactor
+
+### Dependencies
+Blocked by: TASK-005
+
+---
+
+## TASK-031: Unit tests - BMAD adapter
+
+**Labels**: type:test, priority:high
+
+### Description
+Unit tests for the BMAD adapter parser and transformer.
+
+### Acceptance Criteria
+- [ ] Parser: valid BMAD directory, field name variations (asA/as_a), markdown parsing, missing files
+- [ ] Transformer: priority normalization, architecture inference, epic-to-milestone conversion
+- [ ] Coverage > 80%
+
+### Dependencies
+Blocked by: TASK-010
+
+---
+
+## TASK-032: Unit tests - SpecKit adapter
+
+**Labels**: type:test, priority:high
+
+### Description
+Unit tests for the SpecKit generator and validator.
+
+### Acceptance Criteria
+- [ ] Generator: Markdown output with all sections, YAML output, feature grouping by priority
+- [ ] Validator: completeness scoring, required field errors, warning-to-error strict mode
+- [ ] Coverage > 80%
+
+### Dependencies
+Blocked by: TASK-013
+
+---
+
+## TASK-033: Unit tests - Dashboard API
+
+**Labels**: type:test, priority:high
+
+### Description
+Unit tests for the dashboard Fastify REST API and WebSocket.
+
+### Acceptance Criteria
+- [ ] CRUD: GET/POST/PATCH/DELETE /api/tasks
+- [ ] GET /api/project returns correct stats
+- [ ] WebSocket broadcasts on mutations
+- [ ] 404 for missing tasks
+- [ ] Coverage > 80%
 
 ### Dependencies
 Blocked by: TASK-018
 
 ---
 
-## TASK-021: [Brownfield discovery: analyze existing codebases] Create types and interfaces
+## TASK-034: Unit tests - CLI commands
 
-**Labels**: type:feature, priority:high, feature:brownfield-discovery-analyze-existing-codebases
-
-### Description
-Define TypeScript types for Brownfield discovery: analyze existing codebases
-
-### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
-
-
-
----
-
-## TASK-022: [Brownfield discovery: analyze existing codebases] Implement core logic
-
-**Labels**: type:feature, priority:high, feature:brownfield-discovery-analyze-existing-codebases
+**Labels**: type:test, priority:high
 
 ### Description
-Implement main functionality for Brownfield discovery: analyze existing codebases
+Unit tests for CLI commands (init, config, status, export).
 
 ### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
+- [ ] init: creates config file, respects --type and --target options
+- [ ] config: get/set with dot notation
+- [ ] status: reads progress file correctly
+- [ ] export: generates valid md/html/json output
+- [ ] Coverage > 80%
 
 ### Dependencies
-Blocked by: TASK-021
+Blocked by: TASK-023
 
 ---
 
-## TASK-023: [Brownfield discovery: analyze existing codebases] Add validation
-
-**Labels**: type:feature, priority:medium, feature:brownfield-discovery-analyze-existing-codebases
-
-### Description
-Input validation and error handling for Brownfield discovery: analyze existing codebases
-
-### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
-
-### Dependencies
-Blocked by: TASK-022
-
----
-
-## TASK-024: [Brownfield discovery: analyze existing codebases] Write unit tests
-
-**Labels**: type:test, priority:high, feature:brownfield-discovery-analyze-existing-codebases
-
-### Description
-Unit tests for Brownfield discovery: analyze existing codebases
-
-### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
-
-### Dependencies
-Blocked by: TASK-022
-
----
-
-## TASK-025: [Task breakdown with dependencies and priority] Create types and interfaces
-
-**Labels**: type:feature, priority:high, feature:task-breakdown-with-dependencies-and-priority
-
-### Description
-Define TypeScript types for Task breakdown with dependencies and priority
-
-### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
-
-
-
----
-
-## TASK-026: [Task breakdown with dependencies and priority] Implement core logic
-
-**Labels**: type:feature, priority:high, feature:task-breakdown-with-dependencies-and-priority
-
-### Description
-Implement main functionality for Task breakdown with dependencies and priority
-
-### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
-
-### Dependencies
-Blocked by: TASK-025
-
----
-
-## TASK-027: [Task breakdown with dependencies and priority] Add validation
-
-**Labels**: type:feature, priority:medium, feature:task-breakdown-with-dependencies-and-priority
-
-### Description
-Input validation and error handling for Task breakdown with dependencies and priority
-
-### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
-
-### Dependencies
-Blocked by: TASK-026
-
----
-
-## TASK-028: [Task breakdown with dependencies and priority] Write unit tests
-
-**Labels**: type:test, priority:high, feature:task-breakdown-with-dependencies-and-priority
-
-### Description
-Unit tests for Task breakdown with dependencies and priority
-
-### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
-
-### Dependencies
-Blocked by: TASK-026
-
----
-
-## TASK-029: [Web dashboard for task visualization] Create types and interfaces
-
-**Labels**: type:feature, priority:high, feature:web-dashboard-for-task-visualization
-
-### Description
-Define TypeScript types for Web dashboard for task visualization
-
-### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
-
-
-
----
-
-## TASK-030: [Web dashboard for task visualization] Implement core logic
-
-**Labels**: type:feature, priority:high, feature:web-dashboard-for-task-visualization
-
-### Description
-Implement main functionality for Web dashboard for task visualization
-
-### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
-
-### Dependencies
-Blocked by: TASK-029
-
----
-
-## TASK-031: [Web dashboard for task visualization] Add validation
-
-**Labels**: type:feature, priority:medium, feature:web-dashboard-for-task-visualization
-
-### Description
-Input validation and error handling for Web dashboard for task visualization
-
-### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
-
-### Dependencies
-Blocked by: TASK-030
-
----
-
-## TASK-032: [Web dashboard for task visualization] Write unit tests
-
-**Labels**: type:test, priority:high, feature:web-dashboard-for-task-visualization
-
-### Description
-Unit tests for Web dashboard for task visualization
-
-### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
-
-### Dependencies
-Blocked by: TASK-030
-
----
-
-## TASK-033: [MCP server for Claude Desktop integration] Create types and interfaces
-
-**Labels**: type:feature, priority:high, feature:mcp-server-for-claude-desktop-integration
-
-### Description
-Define TypeScript types for MCP server for Claude Desktop integration
-
-### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
-
-
-
----
-
-## TASK-034: [MCP server for Claude Desktop integration] Implement core logic
-
-**Labels**: type:feature, priority:high, feature:mcp-server-for-claude-desktop-integration
-
-### Description
-Implement main functionality for MCP server for Claude Desktop integration
-
-### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
-
-### Dependencies
-Blocked by: TASK-033
-
----
-
-## TASK-035: [MCP server for Claude Desktop integration] Add validation
-
-**Labels**: type:feature, priority:medium, feature:mcp-server-for-claude-desktop-integration
-
-### Description
-Input validation and error handling for MCP server for Claude Desktop integration
-
-### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
-
-### Dependencies
-Blocked by: TASK-034
-
----
-
-## TASK-036: [MCP server for Claude Desktop integration] Write unit tests
-
-**Labels**: type:test, priority:high, feature:mcp-server-for-claude-desktop-integration
-
-### Description
-Unit tests for MCP server for Claude Desktop integration
-
-### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
-
-### Dependencies
-Blocked by: TASK-034
-
----
-
-## TASK-037: [Multi-LLM support (Claude, OpenAI)] Create types and interfaces
-
-**Labels**: type:feature, priority:high, feature:multi-llm-support-claude-openai
-
-### Description
-Define TypeScript types for Multi-LLM support (Claude, OpenAI)
-
-### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
-
-
-
----
-
-## TASK-038: [Multi-LLM support (Claude, OpenAI)] Implement core logic
-
-**Labels**: type:feature, priority:high, feature:multi-llm-support-claude-openai
-
-### Description
-Implement main functionality for Multi-LLM support (Claude, OpenAI)
-
-### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
-
-### Dependencies
-Blocked by: TASK-037
-
----
-
-## TASK-039: [Multi-LLM support (Claude, OpenAI)] Add validation
-
-**Labels**: type:feature, priority:medium, feature:multi-llm-support-claude-openai
-
-### Description
-Input validation and error handling for Multi-LLM support (Claude, OpenAI)
-
-### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
-
-### Dependencies
-Blocked by: TASK-038
-
----
-
-## TASK-040: [Multi-LLM support (Claude, OpenAI)] Write unit tests
-
-**Labels**: type:test, priority:high, feature:multi-llm-support-claude-openai
-
-### Description
-Unit tests for Multi-LLM support (Claude, OpenAI)
-
-### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
-
-### Dependencies
-Blocked by: TASK-038
-
----
-
-## TASK-041: [Export to markdown, HTML, PDF] Create types and interfaces
-
-**Labels**: type:feature, priority:high, feature:export-to-markdown-html-pdf
-
-### Description
-Define TypeScript types for Export to markdown, HTML, PDF
-
-### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
-
-
-
----
-
-## TASK-042: [Export to markdown, HTML, PDF] Implement core logic
-
-**Labels**: type:feature, priority:high, feature:export-to-markdown-html-pdf
-
-### Description
-Implement main functionality for Export to markdown, HTML, PDF
-
-### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
-
-### Dependencies
-Blocked by: TASK-041
-
----
-
-## TASK-043: [Export to markdown, HTML, PDF] Add validation
-
-**Labels**: type:feature, priority:medium, feature:export-to-markdown-html-pdf
-
-### Description
-Input validation and error handling for Export to markdown, HTML, PDF
-
-### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
-
-### Dependencies
-Blocked by: TASK-042
-
----
-
-## TASK-044: [Export to markdown, HTML, PDF] Write unit tests
-
-**Labels**: type:test, priority:high, feature:export-to-markdown-html-pdf
-
-### Description
-Unit tests for Export to markdown, HTML, PDF
-
-### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
-
-### Dependencies
-Blocked by: TASK-042
-
----
-
-## TASK-045: Integration tests
+## TASK-035: Integration tests - full pipeline
 
 **Labels**: type:test, priority:medium
 
 ### Description
-Write integration tests for feature interactions
+Integration test of the full BSR pipeline: init -> discover -> plan -> spec -> tasks -> run using test fixtures.
 
 ### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
+- [ ] End-to-end flow completes without errors
+- [ ] Output files are generated at each step
+- [ ] Data flows correctly between phases
 
 ### Dependencies
-Blocked by: TASK-008, TASK-012, TASK-016, TASK-020, TASK-024, TASK-028, TASK-032, TASK-036, TASK-040, TASK-044
+Blocked by: TASK-031, TASK-032, TASK-033, TASK-034
 
 ---
 
-## TASK-046: E2E tests setup
+## TASK-036: CI/CD with GitHub Actions
 
-**Labels**: type:test, priority:low
+**Labels**: type:infra, priority:medium
 
 ### Description
-Set up end-to-end testing (if applicable)
+GitHub Actions workflows for automated build, test, lint, typecheck. Turborepo caching for faster CI.
 
 ### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
+- [ ] Workflow triggers on push and PR
+- [ ] All checks pass
+- [ ] Turborepo remote caching enabled
 
 ### Dependencies
-Blocked by: TASK-045
+Blocked by: TASK-004
 
 ---
 
-## TASK-047: API documentation
+## TASK-037: npm publish setup
+
+**Labels**: type:infra, priority:low
+
+### Description
+Configure npm publishing for all packages under @bsr-method scope. Set up 2FA.
+
+### Acceptance Criteria
+- [ ] All packages publishable under @bsr-method scope
+- [ ] 2FA configured
+- [ ] Publish script in root package.json
+
+### Dependencies
+Blocked by: TASK-036
+
+---
+
+## TASK-038: README and documentation
 
 **Labels**: type:docs, priority:medium
 
 ### Description
-Document all public APIs
+Comprehensive README with installation, quick start guide, command reference, and architecture overview.
 
 ### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
-
-
+- [ ] Installation instructions (npm/pnpm)
+- [ ] Quick start (init -> plan -> spec -> tasks -> run)
+- [ ] All 11 commands documented with examples
+- [ ] Architecture diagram
 
 ---
 
-## TASK-048: README and getting started
-
-**Labels**: type:docs, priority:high
-
-### Description
-Write comprehensive README with examples
-
-### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
-
-
-
----
-
-## TASK-049: Contributing guide
+## TASK-039: Contributing guide
 
 **Labels**: type:docs, priority:low
 
 ### Description
-Document contribution guidelines
+Document contribution guidelines, development setup, and PR process.
 
 ### Acceptance Criteria
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation updated
+- [ ] Development setup instructions
+- [ ] Code style guide reference
+- [ ] PR template and process
 
-
+### Dependencies
+Blocked by: TASK-038
 
 ---
+*BSR Method - GitHub Issues*
