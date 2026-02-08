@@ -1,126 +1,97 @@
-# Feature Specification: Web dashboard for task visualization
+# Feature: Web Dashboard
 
-**Project**: BSR Method
-**Feature**: Web dashboard for task visualization
-**Date**: 2026-02-08
-**Status**: Draft
+**Package**: `packages/dashboard`
+**Status**: Implemented
+**Priority**: P1
 
 ---
 
 ## Overview
 
-### Description
-Implementation of "Web dashboard for task visualization" functionality for BSR Method.
+The BSR Dashboard is a Fastify-based web server providing real-time task visualization and management. It exposes a REST API for CRUD operations on tasks and a WebSocket endpoint for live updates. Started via `bsr dashboard` command.
 
-### User Story
-As a Solo developers using AI-assisted development,Small teams wanting structured LLM-driven workflows,Developers working on greenfield and brownfield projects,
-I want to web dashboard for task visualization,
-So that I can accomplish my goals efficiently.
+## User Story
 
-### Acceptance Criteria
-- [ ] Feature is accessible from the main interface
-- [ ] Feature handles edge cases gracefully
-- [ ] Feature provides appropriate feedback
-- [ ] Feature is performant (< 200ms response)
-- [ ] Feature is accessible (keyboard navigation, screen readers)
-
----
+As a developer working through a BSR task list, I want a visual dashboard showing task status, dependencies, and progress, so that I can monitor and manage my implementation work.
 
 ## Functional Requirements
 
-### Inputs
-| Input | Type | Required | Description |
-|-------|------|----------|-------------|
-| TBD | TBD | TBD | Define inputs |
+### REST API
 
-### Outputs
-| Output | Type | Description |
-|--------|------|-------------|
-| TBD | TBD | Define outputs |
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/tasks` | GET | List all tasks |
+| `/api/tasks/:id` | GET | Get task by ID |
+| `/api/tasks` | POST | Create new task |
+| `/api/tasks/:id` | PATCH | Update task (partial) |
+| `/api/tasks/:id` | DELETE | Delete task |
+| `/api/project` | GET | Project info + task stats |
+| `/api/logs` | GET | Last 10 log files |
 
-### Business Rules
-1. Define business rules for Web dashboard for task visualization
-2. Add validation rules
-3. Add constraints
+### WebSocket (`/ws`)
 
----
+| Direction | Message Type | Description |
+|-----------|-------------|-------------|
+| Client -> Server | `update-task` | Request task update |
+| Client -> Server | `refresh` | Request full task list |
+| Server -> Client | `task-updated` | Broadcast after PATCH |
+| Server -> Client | `task-created` | Broadcast after POST |
+| Server -> Client | `task-deleted` | Broadcast after DELETE |
+| Server -> Client | `tasks-refreshed` | Full task list response |
+
+### Features
+- Real-time broadcasting: all REST mutations trigger WebSocket broadcasts
+- Data persistence: reads/writes `tasks/breakdown.json`
+- Static file serving: `public/` directory for frontend assets
+- Configurable port (default: 3000) and host (default: 127.0.0.1)
+- Pino logging with pino-pretty for colored output
 
 ## Technical Design
 
-### Components
+### Architecture
 ```
-web-dashboard-for-task-visualization/
-├── index.ts           # Public exports
-├── web-dashboard-for-task-visualization.ts         # Main implementation
-├── web-dashboard-for-task-visualization.test.ts    # Tests
-└── types.ts           # Types for this feature
+packages/dashboard/src/
+├── index.ts       # Public API: createServer(), startServer()
+└── server.ts      # Fastify routes, WebSocket setup, task persistence
 ```
+
+### Key Functions
+
+| Function | Description |
+|----------|-------------|
+| `createServer(config)` | Configure Fastify with plugins and routes |
+| `startServer(config)` | Start listening on configured port |
 
 ### Dependencies
-- Internal: core utilities, types
-- External: TBD
+- **Internal**: `@bsr-method/shared` (types)
+- **External**: `fastify`, `@fastify/websocket`, `@fastify/static`, `pino`, `pino-pretty`
 
-### Interfaces
-
-```typescript
-// Web dashboard for task visualization Types
-interface WebDashboardForTaskVisualizationInput {
-  // Define input type
-}
-
-interface WebDashboardForTaskVisualizationOutput {
-  // Define output type
-}
-
-// Main function signature
-function webDashboardForTaskVisualization(
-  input: WebDashboardForTaskVisualizationInput
-): Promise<WebDashboardForTaskVisualizationOutput>;
+### Data Flow
 ```
-
----
+tasks/breakdown.json <-> Fastify REST API <-> WebSocket <-> Browser
+```
 
 ## Error Handling
 
-| Error | Condition | User Message |
-|-------|-----------|--------------|
-| ValidationError | Invalid input | "Please check your input" |
-| NotFoundError | Resource missing | "Item not found" |
+| Error | Condition | Behavior |
+|-------|-----------|----------|
+| Port in use | Port already bound | Error with port number |
+| No tasks file | `breakdown.json` missing | Empty array, create on first write |
+| Task not found | Invalid ID in GET/PATCH/DELETE | 404 response |
+| Invalid JSON body | Malformed request | 400 response |
+| WebSocket disconnect | Client drops connection | Remove from broadcast set |
+
+## Testing
+
+| Test Case | Description |
+|-----------|-------------|
+| GET /api/tasks | Returns task array from JSON file |
+| POST /api/tasks | Creates task, broadcasts to WS |
+| PATCH /api/tasks/:id | Updates task, broadcasts to WS |
+| DELETE /api/tasks/:id | Deletes task, broadcasts to WS |
+| GET /api/project | Returns project info with stats |
+| WebSocket connection | Client connects, receives broadcasts |
+| Task not found | 404 for invalid task ID |
 
 ---
-
-## Testing Strategy
-
-### Unit Tests
-- Test happy path
-- Test edge cases
-- Test error conditions
-
-### Integration Tests
-- Test with real dependencies
-- Test API endpoints
-
-### Test Cases
-| ID | Description | Expected Result |
-|----|-------------|-----------------|
-| TC-001 | Basic functionality | Success |
-| TC-002 | Invalid input | Validation error |
-| TC-003 | Edge case | Graceful handling |
-
----
-
-## Implementation Notes
-
-### Estimated Effort
-- Development: 2-4 hours
-- Testing: 1-2 hours
-- Documentation: 30 min
-
-### Risks
-- TBD
-
-### Open Questions
-- TBD
-
----
-*BSR Method - SpecKit Feature Specification*
+*BSR Method - Web Dashboard Feature Specification*

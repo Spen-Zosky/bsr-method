@@ -1,126 +1,108 @@
-# Feature Specification: Brownfield discovery: analyze existing codebases
+# Feature: Brownfield Discovery
 
-**Project**: BSR Method
-**Feature**: Brownfield discovery: analyze existing codebases
-**Date**: 2026-02-08
-**Status**: Draft
+**Package**: `packages/cli` (command: `bsr discover`)
+**Status**: Implemented
+**Priority**: P0
 
 ---
 
 ## Overview
 
-### Description
-Implementation of "Brownfield discovery: analyze existing codebases" functionality for BSR Method.
+The discovery phase analyzes existing codebases to extract project state, technology stack, architecture patterns, and gaps/debt. This enables BSR Method to work with brownfield projects by deriving an idea from the existing codebase rather than starting from scratch.
 
-### User Story
-As a Solo developers using AI-assisted development,Small teams wanting structured LLM-driven workflows,Developers working on greenfield and brownfield projects,
-I want to brownfield discovery: analyze existing codebases,
-So that I can accomplish my goals efficiently.
+## User Story
 
-### Acceptance Criteria
-- [ ] Feature is accessible from the main interface
-- [ ] Feature handles edge cases gracefully
-- [ ] Feature provides appropriate feedback
-- [ ] Feature is performant (< 200ms response)
-- [ ] Feature is accessible (keyboard navigation, screen readers)
-
----
+As a developer with an existing codebase, I want to analyze it automatically, so that BSR can generate a project context and feed it into the planning pipeline.
 
 ## Functional Requirements
 
 ### Inputs
+
 | Input | Type | Required | Description |
 |-------|------|----------|-------------|
-| TBD | TBD | TBD | Define inputs |
+| Project root | string (path) | Yes | Working directory (auto-detected) |
+| `--deep` | boolean | No | Thorough analysis with more scanners |
 
 ### Outputs
+
 | Output | Type | Description |
 |--------|------|-------------|
-| TBD | TBD | Define outputs |
+| `discovery/project-context.yaml` | YAML | Complete project analysis |
+
+### Output Schema (`DiscoveredProjectState`)
+```yaml
+metadata:
+  name: "project-name"
+  path: "/path/to/project"
+  analyzedAt: "2026-02-08T10:00:00Z"
+
+derivedIdea:
+  name: "project-name"
+  description: "Derived from codebase analysis"
+  features: [...]
+
+technologyStack:
+  languages: ["TypeScript", "JavaScript"]
+  frameworks: ["Fastify", "Commander.js"]
+  buildTools: ["tsup", "turborepo"]
+  packageManager: "pnpm"
+
+architecture:
+  type: "monorepo"
+  packages: [...]
+  patterns: ["adapter", "pipeline"]
+
+gapsAndDebt:
+  missingTests: [...]
+  todoComments: [...]
+  configIssues: [...]
+```
+
+### Discovery Scanners
+1. **Package scanner** - Reads `package.json` for dependencies, scripts, metadata
+2. **TypeScript scanner** - Analyzes `tsconfig.json`, source structure
+3. **Git scanner** - Recent commits, contributors, branch info
+4. **Structure scanner** - Directory layout, file patterns
+5. **Deep scanner** (with `--deep`) - Source code analysis, TODO/FIXME detection, test coverage estimation
 
 ### Business Rules
-1. Define business rules for Brownfield discovery: analyze existing codebases
-2. Add validation rules
-3. Add constraints
-
----
+1. Discovery only works for brownfield projects (`project.type === 'brownfield'`)
+2. Confidence scores (0-1) are attached to derived information
+3. Existing `discovery/project-context.yaml` is overwritten on re-run
+4. Scanner results are merged into a unified `DiscoveredProjectState`
+5. Scanners that fail are skipped with warnings (partial results OK)
 
 ## Technical Design
 
-### Components
-```
-brownfield-discovery-analyze-existing-codebases/
-├── index.ts           # Public exports
-├── brownfield-discovery-analyze-existing-codebases.ts         # Main implementation
-├── brownfield-discovery-analyze-existing-codebases.test.ts    # Tests
-└── types.ts           # Types for this feature
-```
+### Implementation
+The `discover` command in `packages/cli/src/commands/discover.ts`:
+1. Reads `.bsr/config.yaml` to verify brownfield project
+2. Runs enabled scanners against project root
+3. Merges scanner results with confidence scoring
+4. Writes `discovery/project-context.yaml`
 
 ### Dependencies
-- Internal: core utilities, types
-- External: TBD
-
-### Interfaces
-
-```typescript
-// Brownfield discovery: analyze existing codebases Types
-interface BrownfieldDiscoveryAnalyzeExistingCodebasesInput {
-  // Define input type
-}
-
-interface BrownfieldDiscoveryAnalyzeExistingCodebasesOutput {
-  // Define output type
-}
-
-// Main function signature
-function brownfieldDiscoveryAnalyzeExistingCodebases(
-  input: BrownfieldDiscoveryAnalyzeExistingCodebasesInput
-): Promise<BrownfieldDiscoveryAnalyzeExistingCodebasesOutput>;
-```
-
----
+- **Internal**: `@bsr-method/shared` (`DiscoveredProjectState`, `fileExists`, `ensureDir`)
+- **External**: `js-yaml`, `chalk`, `glob`
 
 ## Error Handling
 
-| Error | Condition | User Message |
-|-------|-----------|--------------|
-| ValidationError | Invalid input | "Please check your input" |
-| NotFoundError | Resource missing | "Item not found" |
+| Error | Condition | Behavior |
+|-------|-----------|----------|
+| Not brownfield | Project type is greenfield | Warning message, exit |
+| No config | `.bsr/config.yaml` missing | Error: run `bsr init` first |
+| Scanner failure | Individual scanner error | Warning, continue with other scanners |
+| Empty project | No recognizable files | Low confidence result with warnings |
+
+## Testing
+
+| Test Case | Description |
+|-----------|-------------|
+| Discover Node.js project | Detects package.json, TypeScript, dependencies |
+| Detect monorepo | Identifies pnpm workspaces, turborepo |
+| Deep scan | Finds TODOs, missing tests |
+| Handle missing config | Error message when no `.bsr/config.yaml` |
+| Partial scanner failure | Continues with remaining scanners |
 
 ---
-
-## Testing Strategy
-
-### Unit Tests
-- Test happy path
-- Test edge cases
-- Test error conditions
-
-### Integration Tests
-- Test with real dependencies
-- Test API endpoints
-
-### Test Cases
-| ID | Description | Expected Result |
-|----|-------------|-----------------|
-| TC-001 | Basic functionality | Success |
-| TC-002 | Invalid input | Validation error |
-| TC-003 | Edge case | Graceful handling |
-
----
-
-## Implementation Notes
-
-### Estimated Effort
-- Development: 2-4 hours
-- Testing: 1-2 hours
-- Documentation: 30 min
-
-### Risks
-- TBD
-
-### Open Questions
-- TBD
-
----
-*BSR Method - SpecKit Feature Specification*
+*BSR Method - Brownfield Discovery Feature Specification*

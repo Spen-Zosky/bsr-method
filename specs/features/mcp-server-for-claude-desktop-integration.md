@@ -1,126 +1,83 @@
-# Feature Specification: MCP server for Claude Desktop integration
+# Feature: MCP Server for Claude Desktop
 
-**Project**: BSR Method
-**Feature**: MCP server for Claude Desktop integration
-**Date**: 2026-02-08
-**Status**: Draft
+**Package**: `packages/mcp-server` (or integrated in CLI)
+**Status**: Implemented (basic)
+**Priority**: P2
 
 ---
 
 ## Overview
 
-### Description
-Implementation of "MCP server for Claude Desktop integration" functionality for BSR Method.
+The MCP (Model Context Protocol) server exposes BSR Method tools to Claude Desktop, allowing users to invoke BSR commands directly from the Claude Desktop chat interface. This enables a conversational development workflow where Claude can plan, spec, and manage tasks without leaving the chat.
 
-### User Story
-As a Solo developers using AI-assisted development,Small teams wanting structured LLM-driven workflows,Developers working on greenfield and brownfield projects,
-I want to mcp server for claude desktop integration,
-So that I can accomplish my goals efficiently.
+## User Story
 
-### Acceptance Criteria
-- [ ] Feature is accessible from the main interface
-- [ ] Feature handles edge cases gracefully
-- [ ] Feature provides appropriate feedback
-- [ ] Feature is performant (< 200ms response)
-- [ ] Feature is accessible (keyboard navigation, screen readers)
-
----
+As a developer using Claude Desktop, I want to invoke BSR commands from the chat interface, so that I can manage my development pipeline without switching to a terminal.
 
 ## Functional Requirements
 
-### Inputs
-| Input | Type | Required | Description |
-|-------|------|----------|-------------|
-| TBD | TBD | TBD | Define inputs |
+### Exposed Tools
 
-### Outputs
-| Output | Type | Description |
-|--------|------|-------------|
-| TBD | TBD | Define outputs |
+| Tool | BSR Command | Description |
+|------|-------------|-------------|
+| `bsr_init` | `bsr init` | Initialize new project |
+| `bsr_discover` | `bsr discover` | Analyze existing codebase |
+| `bsr_plan` | `bsr plan` | Generate planning documents |
+| `bsr_spec` | `bsr spec` | Generate specifications |
+| `bsr_tasks` | `bsr tasks` | Generate task breakdown |
+| `bsr_run` | `bsr run` | Execute Ralph Loop |
+| `bsr_status` | `bsr status` | Show project status |
+| `bsr_config` | `bsr config` | Manage configuration |
+
+### MCP Configuration
+```json
+{
+  "mcpServers": {
+    "bsr-method": {
+      "command": "node",
+      "args": ["path/to/mcp-server/dist/index.js"],
+      "env": {
+        "BSR_PROJECT_ROOT": "/path/to/project"
+      }
+    }
+  }
+}
+```
 
 ### Business Rules
-1. Define business rules for MCP server for Claude Desktop integration
-2. Add validation rules
-3. Add constraints
-
----
+1. MCP server runs as a stdio transport (stdin/stdout)
+2. Project root passed via `BSR_PROJECT_ROOT` environment variable
+3. Each tool maps to a CLI command with equivalent options
+4. Tool responses include structured output (JSON) for Claude to interpret
+5. Long-running operations (discover, run) stream progress updates
 
 ## Technical Design
 
-### Components
-```
-mcp-server-for-claude-desktop-integration/
-├── index.ts           # Public exports
-├── mcp-server-for-claude-desktop-integration.ts         # Main implementation
-├── mcp-server-for-claude-desktop-integration.test.ts    # Tests
-└── types.ts           # Types for this feature
-```
-
 ### Dependencies
-- Internal: core utilities, types
-- External: TBD
+- **Internal**: All BSR packages (cli, shared, adapters)
+- **External**: `@modelcontextprotocol/sdk`
 
-### Interfaces
-
-```typescript
-// MCP server for Claude Desktop integration Types
-interface McpServerForClaudeDesktopIntegrationInput {
-  // Define input type
-}
-
-interface McpServerForClaudeDesktopIntegrationOutput {
-  // Define output type
-}
-
-// Main function signature
-function mcpServerForClaudeDesktopIntegration(
-  input: McpServerForClaudeDesktopIntegrationInput
-): Promise<McpServerForClaudeDesktopIntegrationOutput>;
-```
-
----
+### Protocol
+- Transport: stdio (standard input/output)
+- Format: JSON-RPC 2.0 (MCP standard)
+- Tools registered with schemas matching CLI option types
 
 ## Error Handling
 
-| Error | Condition | User Message |
-|-------|-----------|--------------|
-| ValidationError | Invalid input | "Please check your input" |
-| NotFoundError | Resource missing | "Item not found" |
+| Error | Condition | Behavior |
+|-------|-----------|----------|
+| No project root | `BSR_PROJECT_ROOT` not set | Error response in MCP |
+| Command failure | Underlying CLI command fails | Error response with details |
+| Invalid arguments | Wrong tool parameters | Validation error response |
+
+## Testing
+
+| Test Case | Description |
+|-----------|-------------|
+| Tool registration | All tools listed in MCP capabilities |
+| bsr_status tool | Returns valid project status JSON |
+| bsr_tasks tool | Generates task breakdown |
+| Error handling | Invalid project root returns error |
 
 ---
-
-## Testing Strategy
-
-### Unit Tests
-- Test happy path
-- Test edge cases
-- Test error conditions
-
-### Integration Tests
-- Test with real dependencies
-- Test API endpoints
-
-### Test Cases
-| ID | Description | Expected Result |
-|----|-------------|-----------------|
-| TC-001 | Basic functionality | Success |
-| TC-002 | Invalid input | Validation error |
-| TC-003 | Edge case | Graceful handling |
-
----
-
-## Implementation Notes
-
-### Estimated Effort
-- Development: 2-4 hours
-- Testing: 1-2 hours
-- Documentation: 30 min
-
-### Risks
-- TBD
-
-### Open Questions
-- TBD
-
----
-*BSR Method - SpecKit Feature Specification*
+*BSR Method - MCP Server Feature Specification*

@@ -1,126 +1,91 @@
-# Feature Specification: Ralph execution loop: LLM-powered task implementation
+# Feature: Ralph Execution Loop
 
-**Project**: BSR Method
-**Feature**: Ralph execution loop: LLM-powered task implementation
-**Date**: 2026-02-08
-**Status**: Draft
+**Package**: `packages/cli` (command: `bsr run`)
+**Status**: Implemented
+**Priority**: P0
 
 ---
 
 ## Overview
 
-### Description
-Implementation of "Ralph execution loop: LLM-powered task implementation" functionality for BSR Method.
+The Ralph Loop is the execution engine of BSR Method. It iterates through pending tasks from `tasks/breakdown.json`, generates LLM-appropriate prompts for each task, tracks execution state, and persists progress between runs. Named after the "do the work" phase of the BSR pipeline.
 
-### User Story
-As a Solo developers using AI-assisted development,Small teams wanting structured LLM-driven workflows,Developers working on greenfield and brownfield projects,
-I want to ralph execution loop: llm-powered task implementation,
-So that I can accomplish my goals efficiently.
+## User Story
 
-### Acceptance Criteria
-- [ ] Feature is accessible from the main interface
-- [ ] Feature handles edge cases gracefully
-- [ ] Feature provides appropriate feedback
-- [ ] Feature is performant (< 200ms response)
-- [ ] Feature is accessible (keyboard navigation, screen readers)
-
----
+As a developer with a task breakdown, I want to execute tasks automatically with LLM guidance, so that I can implement features systematically following my plan.
 
 ## Functional Requirements
 
 ### Inputs
+
 | Input | Type | Required | Description |
 |-------|------|----------|-------------|
-| TBD | TBD | TBD | Define inputs |
+| Task list | `tasks/breakdown.json` | Yes | Task breakdown with dependencies |
+| Loop state | `.bsr/loop-state.json` | No | Previous execution state (resume) |
+| `--task` | string | No | Execute specific task by ID |
+| `--limit` | number | No | Max number of tasks to process |
+| `--dry-run` | boolean | No | Preview task selection without executing |
 
 ### Outputs
+
 | Output | Type | Description |
 |--------|------|-------------|
-| TBD | TBD | Define outputs |
+| Updated tasks | JSON | Task statuses updated in `breakdown.json` |
+| Loop state | JSON | Execution state in `.bsr/loop-state.json` |
+| Console output | text | Progress and results per task |
 
-### Business Rules
-1. Define business rules for Ralph execution loop: LLM-powered task implementation
-2. Add validation rules
-3. Add constraints
+### Execution Rules
+1. Tasks are processed in dependency order (topological sort)
+2. A task is only eligible if all its dependencies are `done`
+3. `blocked` tasks are skipped with a warning
+4. Loop state tracks: current task, completed tasks, errors, timestamp
+5. Interrupted runs can resume from loop state
+6. `--dry-run` shows which tasks would be selected without executing
 
----
+### Loop State Schema
+```typescript
+interface LoopState {
+  currentTask: string | null;
+  completedTasks: string[];
+  failedTasks: string[];
+  startedAt: string;
+  lastUpdatedAt: string;
+  iteration: number;
+}
+```
 
 ## Technical Design
 
-### Components
-```
-ralph-execution-loop-llm-powered-task-implementation/
-├── index.ts           # Public exports
-├── ralph-execution-loop-llm-powered-task-implementation.ts         # Main implementation
-├── ralph-execution-loop-llm-powered-task-implementation.test.ts    # Tests
-└── types.ts           # Types for this feature
-```
+### Implementation
+The `run` command in `packages/cli/src/commands/run.ts`:
+1. Loads `tasks/breakdown.json`
+2. Loads or creates `.bsr/loop-state.json`
+3. Filters eligible tasks (pending, dependencies met)
+4. For each task: generates prompt, displays task info, updates state
+5. Persists updated task statuses and loop state
 
 ### Dependencies
-- Internal: core utilities, types
-- External: TBD
-
-### Interfaces
-
-```typescript
-// Ralph execution loop: LLM-powered task implementation Types
-interface RalphExecutionLoopLlmPoweredTaskImplementationInput {
-  // Define input type
-}
-
-interface RalphExecutionLoopLlmPoweredTaskImplementationOutput {
-  // Define output type
-}
-
-// Main function signature
-function ralphExecutionLoopLlmPoweredTaskImplementation(
-  input: RalphExecutionLoopLlmPoweredTaskImplementationInput
-): Promise<RalphExecutionLoopLlmPoweredTaskImplementationOutput>;
-```
-
----
+- **Internal**: `@bsr-method/shared` (types, file utilities)
+- **External**: `js-yaml`, `chalk`
 
 ## Error Handling
 
-| Error | Condition | User Message |
-|-------|-----------|--------------|
-| ValidationError | Invalid input | "Please check your input" |
-| NotFoundError | Resource missing | "Item not found" |
+| Error | Condition | Behavior |
+|-------|-----------|----------|
+| No tasks file | `breakdown.json` missing | Error message, exit |
+| Circular dependency | Task depends on itself (transitively) | Error with cycle details |
+| All tasks blocked | No eligible tasks | Warning, exit cleanly |
+| Task execution failure | LLM or runtime error | Mark task as failed, continue |
+
+## Testing
+
+| Test Case | Description |
+|-----------|-------------|
+| Execute single task | `--task TASK-001` processes only that task |
+| Respect dependencies | Task with unmet deps is skipped |
+| Dry run | `--dry-run` lists tasks without modifying state |
+| Resume from state | Loop state correctly resumes after interruption |
+| Limit batch size | `--limit 3` processes at most 3 tasks |
 
 ---
-
-## Testing Strategy
-
-### Unit Tests
-- Test happy path
-- Test edge cases
-- Test error conditions
-
-### Integration Tests
-- Test with real dependencies
-- Test API endpoints
-
-### Test Cases
-| ID | Description | Expected Result |
-|----|-------------|-----------------|
-| TC-001 | Basic functionality | Success |
-| TC-002 | Invalid input | Validation error |
-| TC-003 | Edge case | Graceful handling |
-
----
-
-## Implementation Notes
-
-### Estimated Effort
-- Development: 2-4 hours
-- Testing: 1-2 hours
-- Documentation: 30 min
-
-### Risks
-- TBD
-
-### Open Questions
-- TBD
-
----
-*BSR Method - SpecKit Feature Specification*
+*BSR Method - Ralph Execution Loop Feature Specification*

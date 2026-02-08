@@ -1,126 +1,102 @@
-# Feature Specification: BMAD planning phase: idea -> PRD -> architecture
+# Feature: BMAD Planning Phase
 
-**Project**: BSR Method
-**Feature**: BMAD planning phase: idea -> PRD -> architecture
-**Date**: 2026-02-08
-**Status**: Draft
+**Package**: `packages/adapters/bmad`
+**Status**: Implemented
+**Priority**: P0
 
 ---
 
 ## Overview
 
-### Description
-Implementation of "BMAD planning phase: idea -> PRD -> architecture" functionality for BSR Method.
+The BMAD (Breakthrough Method for Architecture Design) adapter parses BMAD output directories and transforms them into BSR format. It converts project files, personas, epics, and stories into a unified `idea.yaml` that feeds the rest of the BSR pipeline.
 
-### User Story
-As a Solo developers using AI-assisted development,Small teams wanting structured LLM-driven workflows,Developers working on greenfield and brownfield projects,
-I want to bmad planning phase: idea -> prd -> architecture,
-So that I can accomplish my goals efficiently.
+## User Story
 
-### Acceptance Criteria
-- [ ] Feature is accessible from the main interface
-- [ ] Feature handles edge cases gracefully
-- [ ] Feature provides appropriate feedback
-- [ ] Feature is performant (< 200ms response)
-- [ ] Feature is accessible (keyboard navigation, screen readers)
-
----
+As a developer using BMAD for project planning, I want to import my BMAD output into BSR, so that my planning artifacts automatically flow into specifications and task breakdowns.
 
 ## Functional Requirements
 
 ### Inputs
+
 | Input | Type | Required | Description |
 |-------|------|----------|-------------|
-| TBD | TBD | TBD | Define inputs |
+| BMAD directory | string (path) | Yes | Directory containing BMAD output files |
+| Options | `TransformOptions` | No | Include personas, stories, custom version |
+
+### BMAD Directory Structure (expected)
+```
+bmad-dir/
+├── project.yaml (or project.yml, project.md)
+├── features.yaml
+├── personas/
+│   └── *.yaml
+├── epics/
+│   └── *.yaml
+└── stories/
+    └── *.yaml
+```
 
 ### Outputs
+
 | Output | Type | Description |
 |--------|------|-------------|
-| TBD | TBD | Define outputs |
+| `idea.yaml` | YAML file | BSR idea with features, personas, architecture, milestones |
+| `ParseResult` | Object | Success flag, errors[], warnings[] |
+| `TransformResult` | Object | Success flag, transformed idea, errors[], warnings[] |
 
 ### Business Rules
-1. Define business rules for BMAD planning phase: idea -> PRD -> architecture
-2. Add validation rules
-3. Add constraints
-
----
+1. Parser handles field name variations: `asA`/`as_a`, `iWant`/`i_want`, `soThat`/`so_that`
+2. Priorities normalized to P0-P3 (fallback: HIGH->P0, MEDIUM->P1, LOW->P2)
+3. Architecture inferred from text content (detects: microservices, monolith, serverless, api-first)
+4. Components inferred from keywords (frontend, backend, database, auth, cli)
+5. Integrations detected from mentions (github, slack, stripe, email, oauth)
+6. Epics are converted to milestones in BSR format
 
 ## Technical Design
 
-### Components
+### Architecture
 ```
-bmad-planning-phase-idea-prd-architecture/
-├── index.ts           # Public exports
-├── bmad-planning-phase-idea-prd-architecture.ts         # Main implementation
-├── bmad-planning-phase-idea-prd-architecture.test.ts    # Tests
-└── types.ts           # Types for this feature
+packages/adapters/bmad/src/
+├── index.ts           # Public API: bmadToBSR(), bmadFileToBSR(), convertBMADtoBSR()
+├── parser.ts          # parseBMADDirectory(), parseBMADFile(), findFile()
+├── transformer.ts     # transformToBSR(), inferArchitecture()
+└── types.ts           # BMADProject, BMADFeature, BMADPersona, BMADEpic, BMADUserStory
 ```
+
+### Key Functions
+
+| Function | Description |
+|----------|-------------|
+| `parseBMADDirectory(path)` | Scan directory, parse YAML/Markdown files |
+| `parseBMADFile(filePath)` | Parse single YAML or Markdown file |
+| `transformToBSR(project, options)` | Convert BMADProject to BSR idea |
+| `inferArchitecture(text)` | Detect architecture type, components, integrations from text |
+| `bmadToBSR(dirPath)` | One-call parse + transform pipeline |
+| `convertBMADtoBSR(dirPath, outputPath, options)` | Full pipeline with file write |
 
 ### Dependencies
-- Internal: core utilities, types
-- External: TBD
-
-### Interfaces
-
-```typescript
-// BMAD planning phase: idea -> PRD -> architecture Types
-interface BmadPlanningPhaseIdeaPrdArchitectureInput {
-  // Define input type
-}
-
-interface BmadPlanningPhaseIdeaPrdArchitectureOutput {
-  // Define output type
-}
-
-// Main function signature
-function bmadPlanningPhaseIdeaPrdArchitecture(
-  input: BmadPlanningPhaseIdeaPrdArchitectureInput
-): Promise<BmadPlanningPhaseIdeaPrdArchitectureOutput>;
-```
-
----
+- **Internal**: `@bsr-method/shared` (BSRConfig, types)
+- **External**: `js-yaml` (YAML parsing)
 
 ## Error Handling
 
-| Error | Condition | User Message |
-|-------|-----------|--------------|
-| ValidationError | Invalid input | "Please check your input" |
-| NotFoundError | Resource missing | "Item not found" |
+| Error | Condition | Behavior |
+|-------|-----------|----------|
+| Directory not found | Path doesn't exist | ParseResult with error message |
+| No project file | Missing project.yaml/yml/md | ParseResult with error, partial result |
+| Invalid YAML | Malformed YAML syntax | ParseResult with error at file level |
+| Missing features | No features defined | TransformResult with warning |
+
+## Testing
+
+| Test Case | Description |
+|-----------|-------------|
+| Parse valid BMAD dir | All files parsed, no errors |
+| Parse with field variations | `as_a` and `asA` both work |
+| Transform features | Features preserved with correct priorities |
+| Infer architecture | "microservices" text -> type: microservices |
+| Handle missing files | Graceful partial result with warnings |
+| Markdown project parsing | Extract sections from `# headings` |
 
 ---
-
-## Testing Strategy
-
-### Unit Tests
-- Test happy path
-- Test edge cases
-- Test error conditions
-
-### Integration Tests
-- Test with real dependencies
-- Test API endpoints
-
-### Test Cases
-| ID | Description | Expected Result |
-|----|-------------|-----------------|
-| TC-001 | Basic functionality | Success |
-| TC-002 | Invalid input | Validation error |
-| TC-003 | Edge case | Graceful handling |
-
----
-
-## Implementation Notes
-
-### Estimated Effort
-- Development: 2-4 hours
-- Testing: 1-2 hours
-- Documentation: 30 min
-
-### Risks
-- TBD
-
-### Open Questions
-- TBD
-
----
-*BSR Method - SpecKit Feature Specification*
+*BSR Method - BMAD Adapter Feature Specification*
