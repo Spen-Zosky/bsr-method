@@ -2,7 +2,6 @@ import { Command } from 'commander';
 import chalk from 'chalk';
 import ora from 'ora';
 import fs from 'fs-extra';
-import path from 'path';
 import yaml from 'yaml';
 
 interface Task {
@@ -203,7 +202,7 @@ function generateSetupTasks(projectName: string, startId: number): Task[] {
   ];
 }
 
-function generateFeatureTasks(feature: Feature, startId: number, includeEstimate: boolean): Task[] {
+function generateFeatureTasks(feature: Feature, startId: number, _includeEstimate: boolean): Task[] {
   const tasks: Task[] = [
     {
       id: `TASK-${String(startId).padStart(3, '0')}`,

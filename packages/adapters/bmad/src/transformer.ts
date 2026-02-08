@@ -6,7 +6,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import YAML from 'yaml';
-import type { BMADProject, BMADFeature, BMADPersona, BMADEpic, BMADUserStory } from './parser.js';
+import type { BMADProject, BMADFeature, BMADUserStory } from './parser.js';
 
 export interface BSRIdea {
   name: string;

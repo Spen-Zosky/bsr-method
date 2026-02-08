@@ -5,7 +5,7 @@
 
 import * as fs from 'fs';
 import YAML from 'yaml';
-import type { BSRIdea, BSRFeature, BSRPersona, BSRArchitecture, BSRMilestone } from './generator.js';
+import type { BSRIdea, BSRFeature, BSRPersona, BSRArchitecture } from './generator.js';
 
 export interface ValidationResult {
   valid: boolean;

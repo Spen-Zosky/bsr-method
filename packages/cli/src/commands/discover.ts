@@ -146,7 +146,7 @@ export const discoverCommand = new Command('discover')
     }
   });
 
-async function analyzeProject(projectPath: string, deep: boolean): Promise<DiscoveryResult> {
+async function analyzeProject(projectPath: string, _deep: boolean): Promise<DiscoveryResult> {
   const projectName = path.basename(projectPath);
 
   // Initialize result

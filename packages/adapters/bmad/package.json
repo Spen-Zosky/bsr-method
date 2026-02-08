@@ -9,7 +9,7 @@
     "build": "npx tsup",
     "dev": "npx tsup --watch",
     "test": "vitest run --passWithNoTests",
-    "lint": "echo 'No lint configured'",
+    "lint": "eslint src",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

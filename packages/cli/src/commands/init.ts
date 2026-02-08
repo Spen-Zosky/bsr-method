@@ -18,7 +18,7 @@ export const initCommand = new Command('init')
 
     let projectType = options.greenfield ? 'greenfield' : options.brownfield ? 'brownfield' : null;
     let llmTarget = options.llm;
-    let projectName = options.name || path.basename(process.cwd());
+    const projectName = options.name || path.basename(process.cwd());
 
     if (!projectType && !options.yes) {
       const answers = await inquirer.prompt([

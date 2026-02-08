@@ -45,7 +45,7 @@ const DEFAULT_CONFIG: DashboardConfig = {
   projectPath: process.cwd(),
 };
 
-let wsClients: Set<WebSocket> = new Set();
+const wsClients: Set<WebSocket> = new Set();
 
 /**
  * Create and configure Fastify server
@@ -79,7 +79,7 @@ export async function createServer(config: Partial<DashboardConfig> = {}): Promi
   fastify.decorate('projectPath', cfg.projectPath);
 
   // WebSocket endpoint
-  fastify.get('/ws', { websocket: true }, (connection, req) => {
+  fastify.get('/ws', { websocket: true }, (connection, _req) => {
     const socket = connection as unknown as WebSocket;
     wsClients.add(socket);
     
@@ -87,7 +87,7 @@ export async function createServer(config: Partial<DashboardConfig> = {}): Promi
       try {
         const data = JSON.parse(message.toString());
         handleWebSocketMessage(socket, data, cfg.projectPath);
-      } catch (e) {
+      } catch {
         socket.send(JSON.stringify({ error: 'Invalid message format' }));
       }
     });
@@ -129,7 +129,7 @@ export async function startServer(config: Partial<DashboardConfig> = {}): Promis
  */
 function registerAPIRoutes(fastify: FastifyInstance, projectPath: string): void {
   // Get all tasks
-  fastify.get('/api/tasks', async (req, reply) => {
+  fastify.get('/api/tasks', async (_req, _reply) => {
     const tasks = loadTasks(projectPath);
     return { tasks };
   });
@@ -189,12 +189,12 @@ function registerAPIRoutes(fastify: FastifyInstance, projectPath: string): void 
   });
 
   // Get project info
-  fastify.get('/api/project', async (req, reply) => {
+  fastify.get('/api/project', async (_req, _reply) => {
     return getProjectInfo(projectPath);
   });
 
   // Get logs
-  fastify.get('/api/logs', async (req, reply) => {
+  fastify.get('/api/logs', async (_req, _reply) => {
     return { logs: loadLogs(projectPath) };
   });
 }
@@ -340,7 +340,7 @@ function getProjectInfo(projectPath: string): any {
   const packageJsonPath = path.join(projectPath, 'package.json');
   const ideaPath = path.join(projectPath, 'docs', 'idea.yaml');
   
-  let info: any = {
+  const info: any = {
     path: projectPath,
     name: path.basename(projectPath),
   };

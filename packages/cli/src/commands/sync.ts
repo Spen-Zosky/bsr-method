@@ -2,8 +2,6 @@ import { Command } from 'commander';
 import chalk from 'chalk';
 import ora from 'ora';
 import fs from 'fs-extra';
-import path from 'path';
-import yaml from 'yaml';
 import { exec } from 'child_process';
 import { promisify } from 'util';
 
@@ -91,7 +89,7 @@ function parseGitHubUrl(url: string): { owner: string; repo: string } {
   return { owner: '', repo: '' };
 }
 
-async function showSyncStatus(repoInfo: { owner: string; repo: string }): Promise<void> {
+async function showSyncStatus(_repoInfo: { owner: string; repo: string }): Promise<void> {
   console.log(chalk.cyan('Sync Status\n'));
 
   // Check for gh CLI
@@ -341,7 +339,7 @@ async function importFromGitHub(repoInfo: { owner: string; repo: string }, dryRu
     }
 
     // Convert to BSR tasks
-    const tasks: Task[] = issues.map((issue: any, index: number) => ({
+    const tasks: Task[] = issues.map((issue: any, _index: number) => ({
       id: `GH-${issue.number}`,
       title: issue.title,
       description: `Imported from GitHub Issue #${issue.number}`,

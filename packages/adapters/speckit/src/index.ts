@@ -7,7 +7,7 @@ export * from './generator.js';
 export * from './validator.js';
 
 import { loadIdea, generateSpec, generateAndSave, type GeneratorOptions, type GeneratorResult } from './generator.js';
-import { validateIdea, validateIdeaFile, validateSpec, type ValidationOptions, type ValidationResult } from './validator.js';
+import { validateIdea, validateIdeaFile, type ValidationOptions, type ValidationResult } from './validator.js';
 
 /**
  * High-level API: Load idea, validate, and generate spec
